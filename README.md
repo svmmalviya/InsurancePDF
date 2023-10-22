@@ -3,8 +3,7 @@
   </br>
   </br>
   </br>
-  
-  *Please see steps below*
+  ***Please see steps below***
   </br>
   *Create or Download PDF Steps*
 - **To generate pdf you can add new insurance patient with payment details or can click to eye icon on patient list view to download PDF**
