@@ -4,7 +4,8 @@
 - I’m currently working on [Insurance PDF generator](https://github.com/svmmalviya/InsurancePDF.git)
 
 - To generate pdf you can add new insurance patient with payment details
-- Hit Add new patience
+1 Hit Add new patience
+2 Enter details and payment details and hit <h3>Save Details</h3>  
 <h3 align="left">Connect with me:</h3>
 <p align="left"> 
 </p>
