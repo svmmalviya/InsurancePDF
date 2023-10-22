@@ -1,5 +1,5 @@
 <h1 align="center">Hi 👋, I'm Shiv</h1>
-`#` A passionate backend developer from India
+# A passionate backend developer from India
 
 - I’m currently working on [Insurance PDF generator](https://github.com/svmmalviya/InsurancePDF.git)
 
