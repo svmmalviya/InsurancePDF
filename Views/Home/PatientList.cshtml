@@ -1,0 +1,104 @@
+﻿@model List<HomeViewModel>;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <a asp-action="Index" class="btn btn-outline-success float-end mb-3">New Patient</a>
+    </div>
+    <div class="col-md-12">
+        <div class="table-responsive mt ">
+            <table id="invoicelist" class=" table align-middle table-nowrap table-centered mb-0">
+                <thead>
+                    <tr>
+                        <th style="width: 70px;">SR. No</th>
+                        <th>Patient Name</th>
+                        <th>DOB</th>
+                        <th>Policy Number</th>
+                        <th>Coverage Amount</th>
+                        <th class="text-end" style="width: 250px;"></th>
+                    </tr>
+                </thead><!-- end thead -->
+                <tbody>
+                    @{
+                        var index = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @index
+                                </td>
+                                <td>@item.PartyName</td>
+                                <td>@item.DOB</td>
+                                <td>@item.PolicyNumber</td>
+                                <td>@item.CoverageAmount</td>
+                                <td class="text-end">
+                                    <span>
+                                        <a class="btn btn-primary" asp-action="EditPatient" asp-route-Id="@item.Id">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </span>
+                                    <span>
+                                        <a class="btn btn-info" asp-action="ViewInsuranceDetails" id="viewDetails" target="_blank" asp-controller="Home" asp-route-insuranceId="@item.Id">
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
+
+                                        </a>
+                                    </span>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="@item.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Invoice : @item.Id</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Do you want to delete the invoice?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <a class="btn btn-danger" asp-action="DeleteInvoice" asp-route-id="@item.Id">Delete</a>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            index++;
+                        }
+                    }
+                </tbody><!-- end tbody -->
+            </table><!-- end table -->
+        </div><!-- end table responsive -->
+
+    </div>
+</div>
+
+
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+
+            $('#invoicelist').DataTable({
+                searching: true, // Enable searching
+            });
+
+            var message = '@ViewBag.msg';
+
+            if (message != "") {
+                alert(message);
+            }
+
+            $("#viewDetails").click(function (e) {
+                e.preventDefault();
+                window.open(this.href, '_blank');
+            })
+        });
+    </script>
+}

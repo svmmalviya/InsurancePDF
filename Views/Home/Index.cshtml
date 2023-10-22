@@ -1,0 +1,211 @@
+﻿@model HomeViewModel;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+<form>
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button type="submit" id="GeneratePdf" class="btn btn-primary GeneratePdf float-end ">Save Details</button>
+            <a asp-action="PatientList" asp-controller="Home" class="btn btn-primary w-md float-end  me-3 ">Patient List</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group mb-2">
+                        <label asp-for="@Model.PartyName"></label>
+                        <input asp-for="@Model.PartyName" class="form-control" />
+                        <span asp-validation-for="@Model.PartyName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group mb-2">
+                        <label asp-for="@Model.DOB"></label>
+                        <input type="date" asp-for="@Model.DOB" class="form-control" />
+                        <span asp-validation-for="@Model.DOB" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="offset-md-4"></div>
+                <div class="col-md-4">
+                    <div class="form-group mb-2">
+                        <label asp-for="@Model.PolicyNumber"></label>
+                        <input asp-for="@Model.PolicyNumber" class="form-control" />
+                        <span asp-validation-for="@Model.PolicyNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group mb-2">
+                        <label asp-for="@Model.CoverageAmount"></label>
+                        <input asp-for="@Model.CoverageAmount" type="number" class="form-control" />
+                        <span asp-validation-for="@Model.CoverageAmount"  class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="card mt-5 p-3">
+        <div class="card-title">
+            <div class="row">
+                <div class="col-md-3">
+                    <h4 class="float-start">Transaction Details</h4>
+                </div>
+                <div class="col-md-3">
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+        <div class="card-body">
+            <button id="addRow" class="btn btn-sm btn-outline-primary float-end" type="button">Add Row</button>
+            <table id="myTable">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="">
+                        <td>
+                            <input type="hidden" class="form-control id" disabled />
+                            <input type="text" class="form-control description" />
+                        </td>
+                        <td><input type="date" class="form-control date" /></td>
+                        <td><input type="number" class="form-control amount" value="1" /></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+            ///Generating invoice
+            $("#GeneratePdf").click(function (e) {
+
+                var rows = $('#myTable tbody tr');
+
+                var customer = $("#PartyName").val();
+
+                if (customer == "" || customer == undefined) {
+                    alert("Patient name can not be empty.");
+                    return;
+                }
+                var coverageAmount = parseFloat($("#CoverageAmount").val());
+
+                if (coverageAmount <= 0 || customer == undefined) {
+                    alert("Coverage amount is invalid.");
+                    return;
+                }
+
+                var dob = $("#DOB").val();
+
+                if (dob == null || customer == undefined) {
+                    alert("DOB is invalid.");
+                    return;
+                }
+                var PolicyNumber = $("#PolicyNumber").val();
+
+                if (PolicyNumber == "" || PolicyNumber == undefined) {
+                    alert("Policy Number can not be empty.");
+                    return;
+                }
+
+                var objary = [];
+
+                var amountInvalidate = false;
+                var dateInvalidate = false;
+
+                $.each(rows, function (index, tr) {
+
+                    var desc = $(tr).find(".description").val();
+                    var pddate = $(tr).find(".paymentDate").val();
+                    var amount = $(tr).find(".amount").val();
+
+
+                    if (parseInt(amount) == 0 || parseInt(amount) < 0 || amount == '')
+                        amountInvalidate = true;
+
+                    if (pddate == undefined || pddate == '')
+                        dateInvalidate = true;
+                    
+
+                    var obj = {
+                        Description: desc,
+                        PaymentDate: pddate,
+                        amount: amount
+                    };
+
+                    objary.push(obj);
+                });
+
+                if (amountInvalidate == true) {
+                    alert("Invalid amount.");
+                    return;
+                }
+
+                if (dateInvalidate == true) {
+                    alert("Invalid date.");
+                    return;
+                }
+
+                if (objary.length == 0) {
+                    alert("Please add atleast one product.");
+                    return;
+                }
+
+                var obj = {
+                    PartyName: customer,
+                    CoverageAmount: coverageAmount,
+                    DOB: dob,
+                    PolicyNumber: PolicyNumber,
+                    items: objary
+
+                };
+
+                var url = '@Url.Action("AddPatient","Home")';
+
+
+                $.ajax({
+                    url: url,
+                    data: obj,
+                    type: 'post',
+                    success: function (added) {
+                        if (added == true) {
+                            var url = '@Url.Action("PatientList","Home")';
+                            window.location.href = url;
+                        }
+                    }
+                });
+
+            });
+
+            // Add a new row when the "New Row" button is clicked
+            $('#addRow').click(function () {
+                var newRow = $('<tr></tr>');
+                var td2 = $('<td><input type="text" class="form-control description"  value="" /></td>');
+                var td4 = $('<td><input type="date" class="form-control" /></td>');
+                var td3 = $('<td><input type="number" class="form-control amount" value="1" /></td>');
+                var td6 = $('<td><button class="removeRow btn btn-sm btn-sm-danger " >Remove</button></td>');
+
+                $(newRow).append(td2).append(td4).append(td3).append(td6);
+
+                $('#myTable tbody').append(newRow);
+
+            });
+
+            $('#myTable tbody').on('click', '.removeRow', function () {
+                $(this).closest('tr').remove();
+            });
+
+        });
+    </script>
+}
