@@ -9,7 +9,3 @@
 - Enter details and payment details and hit Save Details
 - Click to the eye icon on patient list view to download PDF
 
-  
-<h3 align="left">Connect with me:</h3>
-<p align="left"> 
-</p>
