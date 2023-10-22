@@ -4,9 +4,10 @@
 - I’m currently working on [Insurance PDF generator](https://github.com/svmmalviya/InsurancePDF.git)
 
 - To generate pdf you can add new insurance patient with payment details or can click to eye icon on patient list view to download PDF 
-1 Hit Add new patience
-2 Enter details and payment details and hit Save Details
-3 Click to the eye icon on patient list view to download PDF
+
+- Hit Add new patience
+- Enter details and payment details and hit Save Details
+- Click to the eye icon on patient list view to download PDF
 
   
 <h3 align="left">Connect with me:</h3>
